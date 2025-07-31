@@ -39,10 +39,29 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Text(HomeController.datas[index][title]),
+                  Text(
+                    "id : ${HomeController.datas[index][id]}  ${HomeController.datas[index][title]}",
+                  ),
                   Spacer(),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                  IconButton(
+                    onPressed: () async {
+                      await HomeController.updateData(
+                        HomeController.datas[index][id],
+                        "shihab",
+                      );
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await HomeController.deleteData(
+                        HomeController.datas[index][id],
+                      );
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.delete),
+                  ),
                 ],
               ),
             ),

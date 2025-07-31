@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
@@ -21,9 +20,9 @@ class HomeController {
     database = await openDatabase(
       "data.db",
       version: 1,
-      onCreate: (db, version) {
-        db.execute(
-          "create table $tablename($id integer primary key autoincrement, $title text not null)",
+      onCreate: (db, version) async {
+        await db.execute(
+          "CREATE TABLE $tablename($id INTEGER PRIMARY KEY AUTOINCREMENT, $title TEXT NOT NULL)",
         );
       },
     );
@@ -40,6 +39,18 @@ class HomeController {
     await getData();
   }
 
-  static void deleteData() {}
-  static void updateData() {}
+  static Future<void> deleteData(int dataid) async {
+    await database.delete(tablename, where: '$id = ?', whereArgs: [dataid]);
+    await getData();
+  }
+
+  static Future<void> updateData(int dataid, String newValue) async {
+    await database.update(
+      tablename,
+      {title: newValue},
+      where: '$id = ?',
+      whereArgs: [dataid],
+    );
+    await getData();
+  }
 }
